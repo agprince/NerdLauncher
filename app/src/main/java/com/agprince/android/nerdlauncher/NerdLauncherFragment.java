@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -66,11 +68,13 @@ public class NerdLauncherFragment extends Fragment {
 
        private ResolveInfo mResolveInfo;
        private TextView mNameTextView;
+       private ImageView mIconImage;
 
         public ActivityHolder(View itemView) {
             super(itemView);
-            mNameTextView = (TextView) itemView;
-            mNameTextView.setOnClickListener(this);
+            mNameTextView = itemView.findViewById(R.id.activity_name);
+            mIconImage =itemView.findViewById(R.id.activity_icon);
+            itemView.setOnClickListener(this);
         }
 
         public void bindActivity(ResolveInfo resolveInfo){
@@ -78,7 +82,8 @@ public class NerdLauncherFragment extends Fragment {
             PackageManager pm = getActivity().getPackageManager();
             String name = resolveInfo.loadLabel(pm).toString();
             mNameTextView.setText(name);
-
+            Drawable drawable = resolveInfo.loadIcon(pm);
+            mIconImage.setImageDrawable(drawable);
         }
 
         @Override
@@ -101,7 +106,7 @@ public class NerdLauncherFragment extends Fragment {
         @Override
         public ActivityHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View v= inflater.inflate(android.R.layout.simple_list_item_1, parent,false);
+            View v= inflater.inflate(R.layout.activity_list_item, parent,false);
             return  new ActivityHolder(v);
         }
 
